@@ -1,0 +1,15 @@
+{
+    "id": "dankGearyMail",
+    "name": "Dank Geary Mail",
+    "description": "Unread mail counts from your Geary accounts",
+    "version": "0.1.0",
+    "license": "MIT",
+    "author": "Kevin Schneider",
+    "icon": "mail",
+    "component": "./DankGearyMailWidget.qml",
+    "settings": "./DankGearyMailSettings.qml",
+    "permissions": [
+        "settings_read",
+        "settings_write"
+    ]
+}

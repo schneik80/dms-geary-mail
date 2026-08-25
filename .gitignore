@@ -1,0 +1,6 @@
+*.log
+*.lock
+*.bak
+*~
+.DS_Store
+__pycache__/
