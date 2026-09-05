@@ -30,6 +30,7 @@ keeps in sync, so whatever Geary knows, the bar knows.
 - [Why](#why)
 - [Requirements](#requirements)
 - [Install](#install)
+- [Troubleshooting](#troubleshooting)
 - [Usage](#usage)
 - [Configuration](#configuration)
 - [Architecture](#architecture)
@@ -50,20 +51,57 @@ connection to every server. This plugin piggybacks on Geary instead.
 
 ## Install
 
+The plugin is in the [DMS plugin registry](https://github.com/AvengeMedia/dms-plugin-registry),
+so the normal route is the one DMS manages for you:
+
+```sh
+dms plugins install dankGearyMail
+```
+
+or **DMS Settings → Plugins → Browse**, then **Install** on *Dank Geary Mail*. Enable it, and
+add it to a bar section under **Settings → Appearance → DankBar Layout**. Later,
+`dms plugins update dankGearyMail` and `dms plugins uninstall dankGearyMail` work as for any
+registry plugin.
+
+### Development install
+
+To run the plugin straight from a checkout instead:
+
 ```sh
 git clone https://github.com/schneik80/dms-geary-mail.git
 cd dms-geary-mail
-./install.sh          # or ./install.sh --link to hack on it live
+./install.sh          # copy into ~/.config/DankMaterialShell/plugins/dankGearyMail
+./install.sh --link   # or symlink, so edits in the checkout are live
 ```
 
-Then in DMS: **Settings → Plugins → Scan for Plugins**, enable **Dank Geary Mail**, and add it
-to a bar section under **Settings → Appearance → DankBar Layout**. Or from a terminal:
+Then enable it in **DMS Settings → Plugins** (or `dms ipc call plugins enable dankGearyMail`)
+and add it to the bar. A development install is not tracked by `dms plugins`; remove it with
+`./install.sh --uninstall`. If the plugin is already installed from the registry, `install.sh`
+refuses to overwrite it unless you pass `--force`, which uninstalls the registry copy first.
+
+## Troubleshooting
+
+**"Install failed: plugin already installed: Dank Geary Mail"** from the Plugin Browser or
+`dms plugins install`, or **"failed to remove symlink: … directory not empty"** from
+`dms plugins uninstall`.
+
+DMS installs registry plugins that live in a subdirectory of their repo (this one does) as a
+symlink into `plugins/.repos/`, and expects `plugins/dankGearyMail` to be that symlink. Anything
+else at that path blocks it: a directory left by an older `install.sh`, a hand-made copy, or a
+stale symlink from `install.sh --link` whose target has moved or is on a drive that is not
+mounted. Clear it and install again:
 
 ```sh
-dms ipc call plugins enable dankGearyMail
+./install.sh --uninstall        # from a checkout, handles every case
+# or by hand:
+rm -rf ~/.config/DankMaterialShell/plugins/dankGearyMail \
+       ~/.config/DankMaterialShell/plugins/dankGearyMail.meta
+dms plugins install dankGearyMail
 ```
 
-`./install.sh --uninstall` removes it.
+**The widget is amber** — Geary is not running, so the counts are whatever it last synced.
+**The widget is red / shows `!`** — the helper failed; run `python3 geary-unread.py` from the
+plugin directory to see the error.
 
 ## Usage
 
