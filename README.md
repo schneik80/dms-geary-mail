@@ -103,6 +103,10 @@ dms plugins install dankGearyMail
 later) could not find `python3` or a Geary configuration. The toast says which. Fix that, then
 enable the plugin again. Older DMS skips the check and the widget shows `!` instead.
 
+**Updated while DMS was running and the check never fires** — Qt caches each plugin
+directory's file list for the life of the shell, so a file added by an update (such as the
+startup check) is invisible until `dms restart`. Only one restart is ever needed.
+
 **The widget is amber** — Geary is not running, so the counts are whatever it last synced.
 **The widget is red / shows `!`** — the helper failed; run `python3 geary-unread.py` from the
 plugin directory to see the error.
