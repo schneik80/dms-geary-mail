@@ -99,6 +99,10 @@ rm -rf ~/.config/DankMaterialShell/plugins/dankGearyMail \
 dms plugins install dankGearyMail
 ```
 
+**"Dank Geary Mail Startup Failed" toast when enabling** — the startup check (DMS 1.5 and
+later) could not find `python3` or a Geary configuration. The toast says which. Fix that, then
+enable the plugin again. Older DMS skips the check and the widget shows `!` instead.
+
 **The widget is amber** — Geary is not running, so the counts are whatever it last synced.
 **The widget is red / shows `!`** — the helper failed; run `python3 geary-unread.py` from the
 plugin directory to see the error.
@@ -132,6 +136,7 @@ plugin/
 ├── plugin.json                 DMS manifest
 ├── DankGearyMailWidget.qml     bar pill + popout; runs the helper via Quickshell Process
 ├── DankGearyMailSettings.qml   settings page
+├── DankGearyMailStartupCheck.qml  runs before load (DMS ≥ 1.5); blocks with a toast if python3 or Geary is missing
 └── geary-unread.py             reads Geary's DBs, prints JSON
 ```
 
