@@ -25,9 +25,21 @@ QtObject {
                     })
                     return
                 }
+                // The helper reports a missing Geary setup as JSON with an "error" field and exit 1.
+                let reported = ""
+                try {
+                    reported = JSON.parse(stdout).error || ""
+                } catch (e) {}
+                if (reported) {
+                    done({
+                        "title": reported,
+                        "details": "Dank Geary Mail reads Geary's local database. Install Geary (Flatpak org.gnome.Geary or native), add at least one account, then re-enable the plugin. Looked in ~/.var/app/org.gnome.Geary and ~/.config/geary."
+                    })
+                    return
+                }
                 done({
-                    "title": "Geary configuration not found",
-                    "details": "Dank Geary Mail reads Geary's local database. Install Geary (Flatpak org.gnome.Geary or native), add at least one account, then re-enable the plugin. Looked in ~/.var/app/org.gnome.Geary and ~/.config/geary."
+                    "title": "Dank Geary Mail helper failed",
+                    "details": "geary-unread.py exited with code " + exitCode + " before producing a result. Run it by hand from the plugin directory to see why, or reinstall with: dms plugins update dankGearyMail"
                 })
             })
     }
